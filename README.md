@@ -5,3 +5,5 @@ This project provides tools to publish and resolve ordinary DNS zones in multica
 The tools were originally designed to implement peer-to-peer DNS service in an OLSR-based wireless mesh network. The following diagram illustrates the architecture.
 ![Architecture diagram](https://github.com/janakj/dns2avahi/blob/main/dns2avahi.png?raw=true)
 Each node runs a local DNS server serving a DNS zone shared by all nodes in the network. The DNS server has only a subset of the zone's records. An Avahi publisher process makes those records available to the network via Avahi Daemon. Multicast DNS packets from Avahi Daemon are propagated across the OLSR network by [`olsrd`](http://www.olsr.org)'s [multicast forwarding plugin](http://olsr.org/git/?p=olsrd.git;a=blob_plain;f=lib/bmf/README_BMF) (bmf).
+
+DNS queries from clients arrive at Unbound recursive resolver which first attempts to resolve the query in the local DNS server. If no records are found, Unbound forwards the query to Avahi Resolver (Unbound Python extension module) which queries Avahi Daemon for records gathered from other (remote) nodes.
