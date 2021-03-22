@@ -21,3 +21,22 @@ The environment variable `DOMAINS` contains a space-delimited list of DNS zones 
 If you wish to propagate DNS zone changes to Avahi immediately, configure your DNS server to send DNS NOTIFY to Avahi Publisher. By default, Avahi Publisher listens for DNS NOTIFY on 127.0.0.1:53535. The IP address and port number are configurable with environment variables `LISTEN_ADDRESS` and `LISTEN_PORT`. Upon receiving a DNS NOTIFY, Avahi Publisher synchronizes the DNS zone with Avahi immediately. 
 
 ## Avahi Resolver
+
+Avahi Resolver is a Python plugin for [Unbound](https://www.nlnetlabs.nl/projects/unbound/about/). To be able to use the plugin, you may need to recompile Unbound to enable Python 3 support as follows:
+```sh
+cd unbound
+PYTHON_VERSION=3 ./configure --with-libevent --with-pythonmodule
+make all
+make install
+```
+The plugin is meant to be used as a fallback resolver that resolves DNS records in multicast DNS if the upstream DNS server cannot be reaached or provides no answer (NXDOMAIN). The following Unbound configuration file snippet shows how to enable the plugin:
+```
+server:
+  module-config: "validator python iterator"
+  num-threads: 32
+  cache-max-negative-ttl: 60
+  cache-max-ttl: 60
+```
+
+The behavior of the plugin can be controlled via a number of environment variables that are all documented in [avahi-resolver.py](avahi-resolver.py).
+
