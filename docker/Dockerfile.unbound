@@ -1,0 +1,32 @@
+FROM debian:stretch
+MAINTAINER Jan Janak <janakj@cs.columbia.edu>
+
+ARG VERSION=1.13.1
+
+RUN apt-get update                             \
+ && apt-get -y install --no-install-recommends \
+    file                                       \
+    gcc                                        \
+    make                                       \
+    python3-dev                                \
+    swig                                       \
+    libc-dev                                   \
+    libevent-dev                               \
+    libexpat-dev                               \
+    libssl-dev                                 \
+    python3-dnspython                          \
+    python3-pydbus
+
+ADD https://www.nlnetlabs.nl/downloads/unbound/unbound-${VERSION}.tar.gz /usr/local/src/
+RUN cd /usr/local/src                 \
+ && tar xvf unbound-${VERSION}.tar.gz \
+ && cd unbound-${VERSION}             \
+ &&   PYTHON_VERSION=3 ./configure    \
+        --with-libevent               \
+        --with-pythonmodule           \
+ &&   make all                        \
+ &&   make install
+
+ADD avahi-resolver.py /
+
+CMD ["unbound", "-dd", "-p", "-c", "/etc/unbound/unbound.conf"]

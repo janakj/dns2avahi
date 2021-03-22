@@ -1,0 +1,19 @@
+FROM python:3.7-stretch
+MAINTAINER Jan Janak <janakj@cs.columbia.edu>
+
+RUN apt-get update                             \
+ && apt-get -y install --no-install-recommends \
+      ca-certificates                          \
+      libc-dev                                 \
+      gcc                                      \
+      libdbus-1-dev                            \
+ && pip3.7 install --upgrade pip
+
+COPY avahi-publisher.py avahi.py /usr/local/src/
+
+RUN pip3.7 install \
+      dnspython    \
+      dbus-python
+
+WORKDIR /usr/local/src
+CMD ["python3.7", "-u", "avahi-publisher.py"]

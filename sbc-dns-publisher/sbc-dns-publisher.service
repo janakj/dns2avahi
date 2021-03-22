@@ -1,0 +1,15 @@
+[Unit]
+Description=Frafos SBC DNS Publisher
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=/.docker_env
+WorkingDirectory=/
+ExecStart=/usr/bin/python -u /usr/local/sbin/sbc-dns-publisher.py
+Restart=always
+RestartSec=1
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target
