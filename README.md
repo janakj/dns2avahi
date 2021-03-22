@@ -40,3 +40,6 @@ server:
 
 The behavior of the plugin can be controlled via a number of environment variables that are all documented in [avahi-resolver.py](avahi-resolver.py).
 
+## Docker Containers
+
+The subdirectory [docker](docker) provides Dockerfiles for [Avahi Publisher](docker/Dockerfile.publisher) and [Unbound](docker/Dockerfile.unbound) with Python 3 plugin enabled.
