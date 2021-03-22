@@ -18,4 +18,6 @@ DOMAINS="foo.org bar.org" DNS_SERVER=127.0.0.1 python3 avahi-publisher.py
 ```
 The environment variable `DOMAINS` contains a space-delimited list of DNS zones you wish to synchronize. The variable `DNS_SERVER` should contain the IP address of the authoritative DNS server for the zones. Note that the DNS server must be configured to allow DNS AXFR requests from the Avahi Publisher's IP address. By default, Avahi Publisher re-downloads the zones every 60 seconds. The interval can be changed with the environment variable 'INTERVAL'.
 
+If you wish to propagate DNS zone changes to Avahi immediately, configure your DNS server to send DNS NOTIFY to Avahi Publisher. By default, Avahi Publisher listens for DNS NOTIFY on 127.0.0.1:53535. The IP address and port number are configurable with environment variables `LISTEN_ADDRESS` and `LISTEN_PORT`. Upon receiving a DNS NOTIFY, Avahi Publisher synchronizes the DNS zone with Avahi immediately. 
+
 ## Avahi Resolver
